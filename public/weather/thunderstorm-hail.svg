@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="storm-hail-cloud" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="lightning-hail-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <!-- Cloud -->
+  <path d="M42 66 L94 66 C105 66 114 57 114 46 C114 35.5 106 27 95.5 26.2 C93 12 81 1 66 1 C53 1 42 9.5 38 21.5 C26 23 17 33 17 45 C17 56.5 26.5 66 38 66 Z" 
+        fill="url(#storm-hail-cloud)"/>
+  <!-- Lightning Bolt -->
+  <polygon points="62,60 48,82 60,82 52,114 78,76 66,76" 
+           fill="url(#lightning-hail-grad)"/>
+  <!-- Hail stones -->
+  <g fill="#E0F2FE" stroke="#38BDF8" stroke-width="1.5">
+    <circle cx="34" cy="88" r="4.5"/>
+    <circle cx="48" cy="106" r="4"/>
+    <circle cx="86" cy="86" r="5"/>
+    <circle cx="98" cy="104" r="4.5"/>
+    <circle cx="80" cy="116" r="3.5"/>
+  </g>
+</svg>

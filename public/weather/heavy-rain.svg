@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="heavyrain-cloud" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="heavyrain-shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Cloud -->
+  <path d="M42 70 L94 70 C105 70 114 61 114 50 C114 39.5 106 31 95.5 30.2 C93 16 81 5 66 5 C53 5 42 13.5 38 25.5 C26 27 17 37 17 49 C17 60.5 26.5 70 38 70 Z" 
+        fill="url(#heavyrain-cloud)" filter="url(#heavyrain-shadow)"/>
+  <!-- Driving Heavy Rain drops -->
+  <g stroke="#0284C7" stroke-width="4" stroke-linecap="round">
+    <line x1="38" y1="80" x2="26" y2="104"/>
+    <line x1="58" y1="80" x2="46" y2="104"/>
+    <line x1="78" y1="80" x2="66" y2="104"/>
+    <line x1="98" y1="80" x2="86" y2="104"/>
+    <line x1="46" y1="100" x2="34" y2="124"/>
+    <line x1="66" y1="100" x2="54" y2="124"/>
+    <line x1="86" y1="100" x2="74" y2="124"/>
+  </g>
+</svg>

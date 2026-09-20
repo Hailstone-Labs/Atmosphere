@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <radialGradient id="sun-grad-pc" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF9D2"/>
+      <stop offset="70%" stop-color="#FFB800"/>
+      <stop offset="100%" stop-color="#FF8A00"/>
+    </radialGradient>
+    <linearGradient id="cloud-grad-pc" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+    <filter id="pc-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <!-- Background Sun -->
+  <g transform="translate(12, -4)">
+    <g stroke="#FFA500" stroke-width="3.5" stroke-linecap="round" opacity="0.85">
+      <line x1="72" y1="20" x2="72" y2="10"/>
+      <line x1="72" y1="84" x2="72" y2="94"/>
+      <line x1="37" y1="52" x2="27" y2="52"/>
+      <line x1="107" y1="52" x2="117" y2="52"/>
+      <line x1="47.2" y1="27.2" x2="40.2" y2="20.2"/>
+      <line x1="96.8" y1="76.8" x2="103.8" y2="83.8"/>
+      <line x1="47.2" y1="76.8" x2="40.2" y2="83.8"/>
+      <line x1="96.8" y1="27.2" x2="103.8" y2="20.2"/>
+    </g>
+    <circle cx="72" cy="52" r="24" fill="url(#sun-grad-pc)"/>
+  </g>
+  <!-- Foreground Cloud -->
+  <path d="M42 96 L94 96 C105 96 114 87 114 76 C114 65.5 106 57 95.5 56.2 C93 42 81 31 66 31 C53 31 42 39.5 38 51.5 C26 53 17 63 17 75 C17 86.5 26.5 96 38 96 Z" 
+        fill="url(#cloud-grad-pc)" filter="url(#pc-shadow)"/>
+</svg>
