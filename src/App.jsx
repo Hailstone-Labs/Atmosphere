@@ -9,6 +9,7 @@ import {
 import Header from './components/Header';
 import WeatherCard from './components/WeatherCard';
 import WeatherMetrics from './components/WeatherMetrics';
+import GFSModelSection from './components/GFSModelSection';
 import GeolocationPrompt from './components/GeolocationPrompt';
 import ErrorAlert from './components/ErrorAlert';
 import { CloudSun } from 'lucide-react';
@@ -66,7 +67,11 @@ export default function App() {
   }, [lastUpdated, coordinates, dispatch]);
 
   const hasWeather = Boolean(currentWeather);
-  const showPrompt = !hasWeather && (geolocationStatus === 'idle' || geolocationStatus === 'requesting' || geolocationStatus === 'denied');
+  const showPrompt =
+    !hasWeather &&
+    (geolocationStatus === 'idle' ||
+      geolocationStatus === 'requesting' ||
+      geolocationStatus === 'denied');
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-blue-500 selection:text-white">
@@ -87,8 +92,14 @@ export default function App() {
           {/* Show Main Weather Dashboard once data is available */}
           {hasWeather && (
             <div className="space-y-6 animate-fade-in">
+              {/* Current Weather Hero Card with 48h Temperature Trend */}
               <WeatherCard />
+
+              {/* Parameter Metrics Grid: Dewpoint, Wind Speed, Wind Direction, Surface Pressure, Cloud Cover — each with 48h Trend Plot */}
               <WeatherMetrics />
+
+              {/* Section Showing GFS Numerical Model Output for Current Location based on Last Run */}
+              <GFSModelSection />
             </div>
           )}
 
@@ -97,7 +108,7 @@ export default function App() {
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin" />
               <p className="mt-4 text-sm font-medium text-slate-300">
-                Retrieving local weather for your device...
+                Retrieving local weather and GFS model output for your device...
               </p>
             </div>
           )}
@@ -117,7 +128,7 @@ export default function App() {
               rel="noreferrer"
               className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
             >
-              Open-Meteo
+              Open-Meteo & NOAA GFS
             </a>
           </div>
         </footer>

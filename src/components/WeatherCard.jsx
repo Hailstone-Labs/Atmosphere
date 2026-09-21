@@ -2,10 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { formatTemperature } from '../utils/unitConversion';
 import { getWeatherCondition } from '../utils/weatherCodes';
+import TrendPlot from './TrendPlot';
 import { MapPin } from 'lucide-react';
 
 export default function WeatherCard() {
-  const { currentWeather, locationDetails, coordinates } = useSelector((state) => state.weather);
+  const { currentWeather, locationDetails, coordinates, pastTrends } = useSelector(
+    (state) => state.weather
+  );
   const unitSystem = useSelector((state) => state.preferences.unitSystem);
 
   if (!currentWeather) return null;
@@ -16,13 +19,19 @@ export default function WeatherCard() {
   );
 
   const formattedTemp = formatTemperature(currentWeather.temperature_2m, unitSystem);
-  
+
   // Format location string
-  const locationTitle = [locationDetails.city, locationDetails.region]
-    .filter(Boolean)
-    .join(', ') || 'Current Location';
+  const locationTitle =
+    [locationDetails.city, locationDetails.region].filter(Boolean).join(', ') ||
+    'Current Location';
 
   const countryText = locationDetails.country || '';
+
+  // Calculate temperature trend over the last 2 days
+  const tempUnit = unitSystem === 'imperial' ? '°F' : '°C';
+  const tempValues = pastTrends?.temperature_2m?.map((c) =>
+    unitSystem === 'imperial' ? (c * 9) / 5 + 32 : c
+  ) || [];
 
   return (
     <div
@@ -45,7 +54,9 @@ export default function WeatherCard() {
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight mt-1">
             {locationTitle}
-            {countryText && <span className="text-slate-400 font-normal text-lg ml-2">({countryText})</span>}
+            {countryText && (
+              <span className="text-slate-400 font-normal text-lg ml-2">({countryText})</span>
+            )}
           </h2>
         </div>
 
@@ -88,7 +99,9 @@ export default function WeatherCard() {
           <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-300">
             <div className="px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-700/60">
               <span className="text-slate-400">Timezone:</span>{' '}
-              <span className="font-medium text-white">{Intl.DateTimeFormat().resolvedOptions().timeZone}</span>
+              <span className="font-medium text-white">
+                {Intl.DateTimeFormat().resolvedOptions().timeZone}
+              </span>
             </div>
             <div className="px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-700/60">
               <span className="text-slate-400">Daylight:</span>{' '}
@@ -99,6 +112,20 @@ export default function WeatherCard() {
           </div>
         </div>
       </div>
+
+      {/* Temperature 48-Hour Trend Plot */}
+      {pastTrends && pastTrends.time?.length > 0 && (
+        <div className="mt-6 pt-5 border-t border-white/10">
+          <TrendPlot
+            times={pastTrends.time}
+            values={tempValues}
+            unit={tempUnit}
+            color="#f59e0b"
+            label="Temperature Trend"
+            height={85}
+          />
+        </div>
+      )}
     </div>
   );
 }

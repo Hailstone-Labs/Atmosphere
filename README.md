@@ -1,15 +1,15 @@
 # Atmosphere (wx_page)
 
-A modern, responsive, real-time local weather dashboard built with React 19, Vite, Tailwind CSS v4, Bun, and Redux Toolkit.
+A modern, responsive, real-time local weather dashboard and numerical weather prediction interface built with **React 19**, **Vite**, **Tailwind CSS v4**, **Bun**, and **Redux Toolkit**.
 
-Atmosphere automatically detects your device location to deliver accurate atmospheric conditions, intuitive visual indicators, dynamic condition-based themes, and seamless unit conversion.
+Atmosphere automatically detects your device location to deliver accurate atmospheric conditions, 48-hour trend plots for every parameter, NOAA GFS numerical model outputs (including CAPE, CIN, and QPE), dynamic condition-based themes, and seamless unit conversion.
 
 ---
 
 ## ✨ Features
 
 - **🌐 Automatic Device Geolocation**: Seamlessly queries the browser's HTML5 Geolocation API with high accuracy on launch.
-- **📍 Reverse Geocoding**: Automatically resolves coordinates to human-readable city, region/state, and country names.
+- **📍 Reverse Geocoding**: Automatically resolves device coordinates to human-readable city, region/state, and country names.
 - **⚡ Real-Time Atmospheric Conditions** (via [Open-Meteo](https://open-meteo.com)):
   - **Current Temperature** with bold, easy-to-read typography.
   - **Dewpoint** calculation for atmospheric moisture levels.
@@ -17,10 +17,29 @@ Atmosphere automatically detects your device location to deliver accurate atmosp
   - **Surface Barometric Pressure** at ground level.
   - **Cloud Cover** percentage with visual progress bar and cloudiness classifications.
   - **Day/Night Cycle & Timezone** detection.
+- **📈 48-Hour Historical Trend Plots for Every Parameter**:
+  - Every single parameter card includes an interactive SVG trend plot spanning the last 2 days (48 hours) up to the current hour.
+  - Features smooth cubic curves, gradient area fills, min/max metrics, timeline tick markers (`-48h`, `-24h`, `Now`), and hover/touch crosshairs with exact timestamp tooltips.
+  - Available for:
+    - **Temperature** (in hero card)
+    - **Dewpoint** (condensation threshold)
+    - **Wind Speed** (surface velocity at 10m)
+    - **Wind Direction** (angular heading & compass bearing)
+    - **Surface Pressure** (barograph trace showing pressure systems)
+    - **Cloud Cover** (sky opacity percentage)
+- **🌪️ NOAA GFS Numerical Model Output (Latest Operational Run)**:
+  - Dedicated section displaying forecast diagnostics from the latest operational cycle (`00Z`, `06Z`, `12Z`, or `18Z`) of the **NOAA Global Forecast System (GFS 0.25°)**:
+  - **Model Surface Diagnostics**: GFS 2m Temperature (with real-time delta vs. observation), Dewpoint, Wind Speed/Direction, and Mean Sea Level Pressure.
+  - **CAPE (Convective Available Potential Energy)**: Atmospheric instability index in $\text{J/kg}$ categorized by thunderstorm potential (Stable, Marginal, Moderate, or Severe Instability).
+  - **CIN (Convective Inhibition Index)**: Boundary-layer capping barrier energy in $\text{J/kg}$ indicating whether convection is easily triggered or suppressed by a capping inversion.
+  - **QPE (Quantitative Precipitation Estimator)**: Current modeled liquid precipitation rate alongside the **48-Hour Cumulative QPE Accumulation Total** in $\text{mm}$ or $\text{inches}$.
+  - **Interactive 48-Hour GFS Meteogram**: Tabbed forecast graph with interactive crosshairs for *Temp & Dewpoint*, *Wind*, *Pressure*, *Cloud Cover*, *QPE Precipitation (Hourly & Cumulative)*, and *CAPE & CIN*.
+  - **GFS Hourly Forecast Strip**: 24-hour horizontal forecast timeline featuring condition artwork, projected temperatures, precipitation totals, and convective alerts.
 - **🎨 Dynamic Weather Art & Theming**: Maps standard WMO weather codes to custom SVG weather artwork, condition badges, and atmospheric gradient backgrounds.
 - **🔄 Unit System Toggle (Metric & Imperial)**:
-  - Toggle between **Metric** (°C, km/h, hPa) and **Imperial** (°F, mph, inHg) at any time.
-  - Persists preference locally in `localStorage` across visits.
+  - Instant toggle between **Metric** (°C, km/h, hPa, mm) and **Imperial** (°F, mph, inHg, in).
+  - Reactively updates all real-time stats, historical 48-hour trend plots, and GFS model charts.
+  - Persists preference locally in `localStorage` across visits (default is **Metric**).
 - **⏱️ Automated Polling & Background Refresh**:
   - Live countdown timer for the automatic 5-minute update cycle.
   - One-click manual refresh button with live loading spinners.
@@ -36,14 +55,15 @@ Atmosphere automatically detects your device location to deliver accurate atmosp
 ## 🛠️ Tech Stack
 
 - **Runtime & Package Manager**: [Bun](https://bun.sh) / [Node.js](https://nodejs.org)
-- **Framework**: [React 19](https://react.dev)
+- **Framework**: [React 19](https://react.dev) (JSX)
 - **Build Tool**: [Vite 8](https://vite.dev)
 - **State Management**: [Redux Toolkit](https://redux-toolkit.js.org) & [React-Redux](https://react-redux.js.org)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com) (via `@tailwindcss/vite`)
 - **Icons**: [Lucide React](https://lucide.dev)
 - **Linter**: [Oxlint](https://oxc.rs)
 - **APIs**:
-  - [Open-Meteo Forecast API](https://open-meteo.com) (No API key required)
+  - [Open-Meteo Forecast & Historical API](https://open-meteo.com) (No API key required)
+  - [Open-Meteo NOAA GFS Seamless Model API](https://open-meteo.com/en/docs/gfs-api)
   - [BigDataCloud Reverse Geocoding Client API](https://www.bigdatacloud.com)
 
 ---
@@ -54,8 +74,7 @@ Atmosphere automatically detects your device location to deliver accurate atmosp
 wx_page/
 ├── public/
 │   ├── favicon.svg             # App favicon
-│   ├── icons.svg               # SVG icons sprite
-│   └── weather/                # SVG weather condition artwork
+│   └── weather/                # Custom SVG weather condition artwork
 │       ├── clear-night.svg
 │       ├── drizzle.svg
 │       ├── fog.svg
@@ -73,16 +92,19 @@ wx_page/
 │   ├── components/
 │   │   ├── ErrorAlert.jsx          # Error banner with retry button
 │   │   ├── GeolocationPrompt.jsx   # Geolocation request, presets, & custom coords
+│   │   ├── GFSModelSection.jsx     # NOAA GFS model run output, CAPE/CIN/QPE meteogram
 │   │   ├── Header.jsx              # App header, timers, unit toggle & refresh
+│   │   ├── TrendPlot.jsx           # Reusable interactive 48-hour SVG trend chart
 │   │   ├── UnitToggle.jsx          # Metric / Imperial switch
-│   │   ├── WeatherCard.jsx         # Hero card with temperature, condition, & art
-│   │   ├── WeatherMetrics.jsx      # Metrics grid (dewpoint, wind, pressure, clouds)
+│   │   ├── WeatherCard.jsx         # Hero card with temperature, condition, art, & trend
+│   │   ├── WeatherMetrics.jsx      # Metrics grid with 48h trend plots for each parameter
 │   │   └── WindCompass.jsx         # Rotating SVG compass with cardinal direction
 │   ├── store/
 │   │   ├── index.js                # Redux store configuration
 │   │   ├── preferencesSlice.js     # User preferences & localStorage persistence
-│   │   └── weatherSlice.js         # Weather & geolocation async thunks & state
+│   │   └── weatherSlice.js         # Weather, GFS, & geolocation async thunks & state
 │   ├── utils/
+│   │   ├── gfsHelper.js            # GFS run cycle calculation, CAPE/CIN & QPE formatting
 │   │   ├── unitConversion.js       # Temperature, speed, pressure, bearing helpers
 │   │   └── weatherCodes.js         # WMO code to condition text, icons, & gradients
 │   ├── App.jsx                     # Root application container & interval timers
@@ -152,9 +174,11 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to view the 
 
 ## 🌐 External APIs Used
 
-1. **[Open-Meteo](https://open-meteo.com)**:
-   - Provides free, high-resolution weather forecasts and real-time meteorological conditions without requiring an API key.
-2. **[BigDataCloud](https://www.bigdatacloud.com)**:
+1. **[Open-Meteo Forecast & Historical API](https://open-meteo.com)**:
+   - Provides free, high-resolution current weather and 2-day historical data without requiring an API key.
+2. **[Open-Meteo NOAA GFS Seamless API](https://open-meteo.com/en/docs/gfs-api)**:
+   - Provides operational run data for the NOAA Global Forecast System (0.25° grid) including CAPE, CIN, surface pressure, and QPE precipitation.
+3. **[BigDataCloud](https://www.bigdatacloud.com)**:
    - Free client-side reverse geocoding API used to convert device coordinates into locality and region information.
 
 ---
