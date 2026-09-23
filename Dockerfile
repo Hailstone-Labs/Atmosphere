@@ -24,4 +24,5 @@ COPY --from=prerelease /usr/src/app/index.html .
 COPY --from=prerelease /usr/src/app/package.json .
 
 USER bun 
+EXPOSE 8080/tcp
 CMD ["bun", "serve", "-s", "build"]
