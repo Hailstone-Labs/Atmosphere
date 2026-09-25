@@ -28,8 +28,6 @@ COPY --from=prerelease /usr/src/app/dist ./dist
 COPY --from=prerelease /usr/src/app/server.ts .
 COPY --from=prerelease /usr/src/app/package.json .
 
-
-
 RUN bun add hono
 ENV PORT=8080
 EXPOSE 8080

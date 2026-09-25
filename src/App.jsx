@@ -118,7 +118,7 @@ export default function App() {
         <footer className="mt-16 pt-6 border-t border-slate-800/80 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
             <CloudSun className="w-4 h-4 text-slate-400" />
-            <span>Weather Application · Stack: ReactJS + Bun + Vite + TailwindCSS + Redux</span>
+            <span>Experimental Weather Application · Use at your own risk.</span>
           </div>
           <div>
             Data sourced with permission from{' '}
