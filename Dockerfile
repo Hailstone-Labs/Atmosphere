@@ -23,5 +23,6 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/index.html .
 COPY --from=prerelease /usr/src/app/package.json .
 
-USER bun 
-CMD ["bun", "run", "start"]
+RUN bun add hono
+EXPOSE 3000
+CMD ["bun", "/usr/src/app/server.ts"]
