@@ -20,10 +20,17 @@ RUN bun run build
 
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/index.html .
+
+# Copy the Vite build output directory
+COPY --from=prerelease /usr/src/app/dist ./dist
+
+# Copy the Hono server script
+COPY --from=prerelease /usr/src/app/server.ts .
 COPY --from=prerelease /usr/src/app/package.json .
+
+
 
 RUN bun add hono
 ENV PORT=8080
 EXPOSE 8080
-CMD ["bun", "run", "/usr/src/app/server.ts"]
+CMD ["bun", "run", "server.ts"]
