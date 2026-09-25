@@ -24,5 +24,5 @@ COPY --from=prerelease /usr/src/app/index.html .
 COPY --from=prerelease /usr/src/app/package.json .
 
 RUN bun add hono
-EXPOSE 3000
+EXPOSE 8080
 CMD ["bun", "/usr/src/app/server.ts"]
